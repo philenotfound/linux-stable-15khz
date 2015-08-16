@@ -258,6 +258,12 @@ int drm_helper_probe_single_connector_modes(struct drm_connector *connector,
 		goto prune;
 	}
 
+	if (connector->c15khz)
+		goto prune;
+
+	if (connector->c25khz)
+		goto prune;
+
 	if (connector->override_edid) {
 		struct edid *edid = (struct edid *) connector->edid_blob_ptr->data;
 
