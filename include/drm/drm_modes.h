@@ -159,6 +159,8 @@ struct drm_cmdline_mode {
 	bool cvt;
 	bool margins;
 	enum drm_connector_force force;
+	bool c15khz;
+	bool c25khz;
 };
 
 /**
