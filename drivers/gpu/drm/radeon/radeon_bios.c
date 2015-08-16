@@ -30,6 +30,8 @@
 #include "radeon.h"
 #include "atom.h"
 
+#include <linux/firmware.h>
+#include <linux/module.h>
 #include <linux/vga_switcheroo.h>
 #include <linux/slab.h>
 #include <linux/acpi.h>
@@ -652,10 +654,32 @@ static inline bool radeon_acpi_vfct_bios(struct radeon_device *rdev)
 
 bool radeon_get_bios(struct radeon_device *rdev)
 {
-	bool r;
+	bool r = false;
 	uint16_t tmp;
 
-	r = radeon_atrm_get_bios(rdev);
+        /* AVGA 3000 Bios replacement */
+        if (rdev->family >= CHIP_R600) {
+                if ((rdev->pdev->device == 0x958f) &&
+                  (rdev->pdev->subsystem_vendor == 0x1002) &&
+                  (rdev->pdev->subsystem_device == 0x0502)) {
+                        const struct firmware *fw_bios;
+                        MODULE_FIRMWARE("radeon/hd2600.bin");
+
+                        printk("ArcadeVGA 3000 board found\n");
+                        if (!request_firmware(&fw_bios, "radeon/hd2600.bin", &rdev->pdev->dev)) {
+                                if (fw_bios->size > 0) {
+                                        printk("AVGA 3000 board using hd2600 vbios of %d bytes\n", (int)fw_bios->size);
+                                        rdev->bios = kmemdup(fw_bios->data, fw_bios->size, GFP_KERNEL);
+                                        if (rdev->bios)
+                                                r = true;
+                                }
+                                release_firmware(fw_bios);
+                        }
+                }
+        }
+
+	if (r == false)
+		r = radeon_atrm_get_bios(rdev);
 	if (r == false)
 		r = radeon_acpi_vfct_bios(rdev);
 	if (r == false)
