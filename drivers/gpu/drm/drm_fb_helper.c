@@ -1481,6 +1481,34 @@ struct drm_display_mode *drm_pick_cmdline_mode(struct drm_fb_helper_connector *f
 	if (cmdline_mode->rb || cmdline_mode->margins)
 		goto create_mode;
 
+	if (cmdline_mode->c15khz) {
+		mode = drm_mode_find_c15khz(fb_helper_conn->connector->dev,
+			cmdline_mode->xres,
+			cmdline_mode->yres,
+			(cmdline_mode->refresh_specified) ?
+				cmdline_mode->refresh : 0);
+
+		if (mode) {
+			drm_mode_set_crtcinfo(mode, CRTC_INTERLACE_HALVE_V);
+			list_add(&mode->head, &fb_helper_conn->connector->modes);
+			return mode;
+		}
+	}
+
+	if (cmdline_mode->c25khz) {
+		mode = drm_mode_find_c25khz(fb_helper_conn->connector->dev,
+			cmdline_mode->xres,
+			cmdline_mode->yres,
+			(cmdline_mode->refresh_specified) ?
+				cmdline_mode->refresh : 0);
+
+		if (mode) {
+			drm_mode_set_crtcinfo(mode, CRTC_INTERLACE_HALVE_V);
+			list_add(&mode->head, &fb_helper_conn->connector->modes);
+			return mode;
+		}
+	}
+
 	prefer_non_interlace = !cmdline_mode->interlace;
 again:
 	list_for_each_entry(mode, &fb_helper_conn->connector->modes, head) {
