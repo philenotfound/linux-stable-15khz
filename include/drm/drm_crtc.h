@@ -743,6 +743,12 @@ struct drm_connector {
 	uint8_t num_h_tile, num_v_tile;
 	uint8_t tile_h_loc, tile_v_loc;
 	uint16_t tile_h_size, tile_v_size;
+
+	/* 15KHz output */
+	bool c15khz;
+
+	/* 25KHz output */
+	bool c25khz;
 };
 
 /**
@@ -1495,6 +1501,10 @@ extern int drm_edid_header_is_valid(const u8 *raw_edid);
 extern bool drm_edid_block_valid(u8 *raw_edid, int block, bool print_bad_edid,
 				 bool *edid_corrupt);
 extern bool drm_edid_is_valid(struct edid *edid);
+struct drm_display_mode *drm_mode_find_c15khz(struct drm_device *dev,
+					      int hsize, int vsize, int fresh);
+struct drm_display_mode *drm_mode_find_c25khz(struct drm_device *dev,
+					      int hsize, int vsize, int fresh);
 
 extern struct drm_tile_group *drm_mode_create_tile_group(struct drm_device *dev,
 							 char topology[8]);
