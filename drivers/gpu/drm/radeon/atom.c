@@ -1283,13 +1283,16 @@ struct atom_context *atom_parse(struct card_info *card, void *bios)
 		kfree(ctx);
 		return NULL;
 	}
-	if (strncmp
-	    (CSTR(ATOM_ATI_MAGIC_PTR), ATOM_ATI_MAGIC,
-	     strlen(ATOM_ATI_MAGIC))) {
-		printk(KERN_INFO "Invalid ATI magic.\n");
-		kfree(ctx);
-		return NULL;
-	}
+        if (strncmp
+            (CSTR(ATOM_ATI_MAGIC_PTR), ATOM_ATI_MAGIC,
+             strlen(ATOM_ATI_MAGIC)) &&
+              strncmp
+                (CSTR(ATOM_ATI_MAGIC_PTR), ATOM_AVGA_MAGIC,
+                strlen(ATOM_AVGA_MAGIC))) {
+                printk(KERN_INFO "Invalid ATI magic.\n");
+                kfree(ctx);
+                return NULL;
+        }
 
 	base = CU16(ATOM_ROM_TABLE_PTR);
 	if (strncmp
