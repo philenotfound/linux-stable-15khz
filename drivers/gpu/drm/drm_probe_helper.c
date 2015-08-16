@@ -165,6 +165,12 @@ static int drm_helper_probe_single_connector_modes_merge_bits(struct drm_connect
 		goto prune;
 	}
 
+	if (connector->c15khz)
+		goto prune;
+
+	if (connector->c25khz)
+		goto prune;
+
 #ifdef CONFIG_DRM_LOAD_EDID_FIRMWARE
 	count = drm_load_edid_firmware(connector);
 	if (count == 0)
