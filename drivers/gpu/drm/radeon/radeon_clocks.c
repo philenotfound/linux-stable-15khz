@@ -242,7 +242,8 @@ void radeon_get_clock_info(struct drm_device *dev)
 			if (rdev->family >= CHIP_R420) {
 				p1pll->pll_in_min = 100;
 				p1pll->pll_in_max = 1350;
-				p1pll->pll_out_min = 20000;
+				//p1pll->pll_out_min = 20000;
+				p1pll->pll_out_min = 4308;
 				p1pll->pll_out_max = 50000;
 				p2pll->pll_in_min = 100;
 				p2pll->pll_in_max = 1350;
@@ -251,7 +252,8 @@ void radeon_get_clock_info(struct drm_device *dev)
 			} else {
 				p1pll->pll_in_min = 40;
 				p1pll->pll_in_max = 500;
-				p1pll->pll_out_min = 12500;
+				//p1pll->pll_out_min = 12500;
+				p1pll->pll_out_min = 4308;
 				p1pll->pll_out_max = 35000;
 				p2pll->pll_in_min = 40;
 				p2pll->pll_in_max = 500;

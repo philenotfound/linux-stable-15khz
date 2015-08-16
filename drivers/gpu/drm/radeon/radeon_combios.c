@@ -745,7 +745,8 @@ bool radeon_combios_get_clock_info(struct drm_device *dev)
 		/* pixel clocks */
 		p1pll->reference_freq = RBIOS16(pll_info + 0xe);
 		p1pll->reference_div = RBIOS16(pll_info + 0x10);
-		p1pll->pll_out_min = RBIOS32(pll_info + 0x12);
+		//p1pll->pll_out_min = RBIOS32(pll_info + 0x12);
+		p1pll->pll_out_min = 4308;
 		p1pll->pll_out_max = RBIOS32(pll_info + 0x16);
 		p1pll->lcd_pll_out_min = p1pll->pll_out_min;
 		p1pll->lcd_pll_out_max = p1pll->pll_out_max;
