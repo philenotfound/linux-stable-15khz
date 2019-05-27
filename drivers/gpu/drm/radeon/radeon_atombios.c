@@ -341,6 +341,17 @@ static bool radeon_atom_apply_quirks(struct drm_device *dev,
 			return false;
 	}
 
+        /* Arcade VGA 3000 card is DVI+VGA, not DVI+DVI */
+        if ((dev->pdev->device == 0x958f) &&
+            (dev->pdev->subsystem_vendor == 0x1002) &&
+            (dev->pdev->subsystem_device == 0x0502)) {
+                if (supported_device == ATOM_DEVICE_CRT1_SUPPORT || supported_device == ATOM_DEVICE_DFP2_SUPPORT) {
+                        if (*connector_type == DRM_MODE_CONNECTOR_DVII) {
+                                *connector_type = DRM_MODE_CONNECTOR_VGA;
+                        }
+                }
+        }
+
 	/* Gigabyte X1300 is DVI+VGA, not DVI+DVI */
 	if ((dev->pdev->device == 0x7142) &&
 	    (dev->pdev->subsystem_vendor == 0x1458) &&
@@ -1164,6 +1175,14 @@ bool radeon_atom_get_clock_info(struct drm_device *dev)
 				le32_to_cpu(firmware_info->info_12.ulMinPixelClockPLL_Output);
 		p1pll->pll_out_max =
 		    le32_to_cpu(firmware_info->info.ulMaxPixelClockPLL_Output);
+
+		/* Arcade VGA 3000 card settings */
+		if ((dev->pdev->device == 0x958f) &&
+			(dev->pdev->subsystem_vendor == 0x1002) &&
+			(dev->pdev->subsystem_device == 0x0502)) {
+				p1pll->pll_out_min = 50000;
+				p2pll->pll_out_min = 50000;
+		}
 
 		if (((frev < 2) && (crev >= 4)) || (frev >= 2)) {
 			p1pll->lcd_pll_out_min =
