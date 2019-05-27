@@ -477,6 +477,12 @@ retry:
 		goto prune;
 	}
 
+	if (connector->c15khz)
+		goto prune;
+
+	if (connector->c25khz)
+		goto prune;
+
 	count = (*connector_funcs->get_modes)(connector);
 
 	if (count == 0 && connector->status == connector_status_connected)

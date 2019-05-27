@@ -834,6 +834,8 @@ struct drm_cmdline_mode {
 	bool cvt;
 	bool margins;
 	enum drm_connector_force force;
+	bool c15khz;
+	bool c25khz;
 };
 
 /**
@@ -1151,6 +1153,13 @@ struct drm_connector {
 	/** @tile_h_size: horizontal size of this tile. */
 	/** @tile_v_size: vertical size of this tile. */
 	uint16_t tile_h_size, tile_v_size;
+
+	/* 15KHz output */
+	bool c15khz;
+
+	/* 25KHz output */
+	bool c25khz;
+
 
 	/**
 	 * @free_node:
